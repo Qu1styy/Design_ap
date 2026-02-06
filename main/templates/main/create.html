@@ -1,0 +1,41 @@
+{% extends 'main/base.html'%}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Создание заявки</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Название</label>
+      {{ form.title }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Описание</label>
+      {{ form.description }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Категория</label>
+      {{ form.category }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Фото помещения / план</label>
+      {{ form.photo }}
+    </div>
+
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors }}
+      </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">
+      Создать заявку
+    </button>
+  </form>
+</div>
+{% endblock %}

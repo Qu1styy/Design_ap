@@ -1,0 +1,36 @@
+{% extends 'main/base.html'%}
+
+{% block title %}
+Главная
+{% endblock %}
+
+{% block content %}
+
+
+{% if user.is_staff %}
+<h1>Главная</h1>
+    <!-- админ -->
+
+{% elif user.is_authenticated %}
+<h1>Главная</h1>
+    <!-- пользователь -->
+
+{% else %}
+<div style="margin-top: 250px;">
+    <h2 class="text-center">Вы ещё не авторизовались</h2>
+    <ul style="margin-right: 40px; display: flex; flex-direction: row; gap: 10px;" class="d-flex justify-content-center align-items-center nav nav-pills">
+            <li class="nav-item">
+                <a href="{% url 'login' %}" class="btn btn-primary" aria-current="page">
+                    Вход
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'register' %}" class="btn btn-primary">
+                    Регистрация
+                </a>
+            </li>
+        </ul>
+</div>
+{% endif %}
+
+{% endblock %}

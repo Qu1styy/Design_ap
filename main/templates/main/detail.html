@@ -1,0 +1,25 @@
+<h2>{{ request_obj.title }}</h2>
+
+<p><b>Описание:</b> {{ request_obj.description }}</p>
+<p><b>Категория:</b> {{ request_obj.category }}</p>
+<p><b>Статус:</b> {{ request_obj.get_status_display }}</p>
+<p><b>Создано:</b> {{ request_obj.created_at }}</p>
+
+{% if request_obj.image %}
+    <img src="{{ request_obj.image.url }}" width="300">
+{% endif %}
+
+<hr>
+
+{% if form %}
+    <h3>Редактирование</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <a href="{% url 'request_delete' request_obj.pk %}">Удалить заявку</a>
+{% else %}
+    <p>Редактирование недоступно — заявка уже в работе</p>
+{% endif %}

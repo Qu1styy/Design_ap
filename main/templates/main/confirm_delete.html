@@ -1,0 +1,7 @@
+<h3>Вы уверены, что хотите удалить заявку "{{ request_obj.title }}"?</h3>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+    <a href="{% url 'request_detail' request_obj.pk %}">Отмена</a>
+</form>
