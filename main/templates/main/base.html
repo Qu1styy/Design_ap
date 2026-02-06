@@ -31,6 +31,11 @@
                     Профиль
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{% url 'my_requests' %}" class="btn btn-primary" aria-current="page">
+                    Мои заявки
+                </a>
+            </li>
         </ul>
     </header>
 {% elif user.is_authenticated %}

@@ -18,9 +18,7 @@ def index(request):
 
 @login_required
 def profile(request):
-    # Получаем все заявки пользователя
-    requests = DesignRequest.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'main/profile.html', {'requests': requests})
+    return render(request, 'main/profile.html')
 
 @login_required
 def create_design_request(request):
@@ -36,3 +34,13 @@ def create_design_request(request):
         form = DesignRequestForm()
 
     return render(request, 'main/create.html', {'form': form})
+
+@login_required
+def my_requests(request):
+    requests = DesignRequest.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    return render(request, 'main/my_requests.html', {
+        'requests': requests
+    })

@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Мои заявки</h1>
+<a href="{% url 'create' %}" class="btn btn-primary mb-3">Создать заявку</a>
+  {% if requests %}
+    <div class="row">
+      {% for r in requests %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100">
+
+            {% if r.photo %}
+              <img src="{{ r.photo.url }}" class="card-img-top">
+            {% endif %}
+
+            <div class="card-body">
+              <h5>{{ r.title }}</h5>
+              <p>{{ r.description|truncatechars:100 }}</p>
+
+              <p><b>Категория:</b> {{ r.category.name }}</p>
+
+              {% if r.status == 'new' %}
+                <span class="badge bg-primary">Новая</span>
+              {% elif r.status == 'in_progress' %}
+                <span class="badge bg-warning text-dark">Принято в работу</span>
+              {% elif r.status == 'done' %}
+                <span class="badge bg-success">Выполнено</span>
+              {% endif %}
+
+              <p class="mt-2">
+                <small>{{ r.created_at|date:"d.m.Y H:i" }}</small>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>У вас пока нет заявок</p>
+  {% endif %}
+</div>
+{% endblock %}
