@@ -1,0 +1,19 @@
+{% extends 'main/base.html'%}
+
+{% block title %}
+ФАфа?
+{% endblock %}
+
+{% block content %}
+<h2>Удалить заявку</h2>
+
+<p>
+  Ты точно хочешь удалить заявку
+  <b>{{ request_obj.title }}</b>?
+</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">Да, удалить</button>
+</form>
+{% endblock %}

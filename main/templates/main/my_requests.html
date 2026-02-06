@@ -30,13 +30,16 @@
                 <span class="badge bg-success">Выполнено</span>
               {% endif %}
 
+
               <p class="mt-2">
                 <small>{{ r.created_at|date:"d.m.Y H:i" }}</small>
               </p>
+                <a class="btn btn-danger btn-sm" href="{% url 'delete_request' r.id %}">Удалить</a>
             </div>
 
           </div>
         </div>
+
       {% endfor %}
     </div>
   {% else %}

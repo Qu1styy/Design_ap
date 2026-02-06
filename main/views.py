@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, DesignRequestForm
 from .models import DesignRequest
@@ -44,3 +44,21 @@ def my_requests(request):
     return render(request, 'main/my_requests.html', {
         'requests': requests
     })
+
+@login_required
+def delete_design_request(request, request_id):
+    design_request = get_object_or_404(
+        DesignRequest,
+        id=request_id,
+        user=request.user
+    )
+
+    if request.method == 'POST':
+        design_request.delete()
+        return redirect('my_requests')
+
+    return render(
+        request,
+        'main/delete_request.html',
+        {'request_obj': design_request}
+    )

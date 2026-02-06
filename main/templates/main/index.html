@@ -9,11 +9,9 @@
 
 {% if user.is_staff %}
 <h1>Главная</h1>
-    <!-- админ -->
 
 {% elif user.is_authenticated %}
 <h1>Главная</h1>
-    <!-- пользователь -->
 
 {% else %}
 <div style="margin-top: 250px;">
