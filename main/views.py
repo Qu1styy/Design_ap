@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, DesignRequestForm
 from .models import DesignRequest
+from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
@@ -29,7 +30,7 @@ def create_design_request(request):
             design_request.user = request.user
             # статус "Новая" ставится автоматически
             design_request.save()
-            return redirect('profile')  # возвращаем в профиль
+            return redirect('my_requests')  # возвращаем в профиль
     else:
         form = DesignRequestForm()
 
@@ -47,18 +48,20 @@ def my_requests(request):
 
 @login_required
 def delete_design_request(request, request_id):
-    design_request = get_object_or_404(
-        DesignRequest,
-        id=request_id,
-        user=request.user
-    )
+    # Получаем заявку, только если она принадлежит пользователю
+    design_request = get_object_or_404(DesignRequest, id=request_id, user=request.user)
 
-    if request.method == 'POST':
-        design_request.delete()
+    # Проверяем статус заявки
+    if design_request.status != 'new':
+        messages.error(request, "Эту заявку нельзя удалить, она уже в работе или выполнена.")
         return redirect('my_requests')
 
-    return render(
-        request,
-        'main/delete_request.html',
-        {'request_obj': design_request}
-    )
+    if request.method == 'POST':
+        # Пользователь подтвердил удаление
+        design_request.delete()
+        messages.success(request, "Заявка успешно удалена!")
+        return redirect('my_requests')
+
+    # Показываем страницу подтверждения
+    return render(request, 'main/delete_request.html', {'request_obj': design_request})
+
