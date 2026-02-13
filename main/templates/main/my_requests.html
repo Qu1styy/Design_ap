@@ -8,10 +8,10 @@
     <a href="{% url 'create' %}" class="btn btn-primary mb-3">Создать заявку</a>
 
   <div class="mb-3">
-    <a href="{% url 'my_requests' %}" class="btn btn-secondary btn-sm">Все</a>
-    <a href="{% url 'my_requests' %}?status=new" class="btn btn-primary btn-sm">Новые</a>
-    <a href="{% url 'my_requests' %}?status=in_progress" class="btn btn-warning btn-sm text-dark">В работе</a>
-    <a href="{% url 'my_requests' %}?status=done" class="btn btn-success btn-sm">Выполнено</a>
+    <a href="{% url 'my_requests' %}" class="btn btn-outline-secondary btn-sm{% if not status_filter %} active{% endif %}">Все</a>
+    <a href="{% url 'my_requests' %}?status=new" class="btn btn-outline-primary btn-sm{% if status_filter == 'new' %} active{% endif %}">Новые</a>
+    <a href="{% url 'my_requests' %}?status=in_progress" class="btn btn-outline-warning btn-sm{% if status_filter == 'in_progress' %} active{% endif %}">В работе</a>
+    <a href="{% url 'my_requests' %}?status=done" class="btn btn-outline-success btn-sm{% if status_filter == 'done' %} active{% endif %}">Выполнено</a>
   </div>
 
   {% if requests %}
@@ -28,14 +28,18 @@
               <p><strong>Категория:</strong> {{ r.category.name }}</p>
               <p>
                 <strong>Статус:</strong>
-                {% if r.status == 'new' %}<span class="badge bg-primary">Новая</span>{% endif %}
-                {% if r.status == 'in_progress' %}<span class="badge bg-warning text-dark">В работе</span>{% endif %}
-                {% if r.status == 'done' %}<span class="badge bg-success">Выполнено</span>{% endif %}
+                {% if r.status == 'new' %}
+                  <span class="badge bg-primary">Новая</span>
+                {% elif r.status == 'in_progress' %}
+                  <span class="badge bg-warning text-dark">В работе</span>
+                {% else %}
+                  <span class="badge bg-success">Выполнено</span>
+                {% endif %}
               </p>
               <p><small class="text-muted">Дата: {{ r.created_at|date:"d.m.Y H:i" }}</small></p>
-                {% if r.status == 'new' %}
-  <a href="{% url 'delete_request' r.pk %}" class="btn btn-danger btn-sm mt-2">Удалить</a>
-{% endif %}
+              {% if r.status == 'new' %}
+                <a href="{% url 'delete_request' r.pk %}" class="btn btn-danger btn-sm mt-2">Удалить</a>
+              {% endif %}
             </div>
           </div>
         </div>

@@ -169,10 +169,16 @@ def is_admin(user):
 @login_required
 @user_passes_test(is_admin)
 def filter_status(request):
+    status_filter = request.GET.get('status')
+
     requests = DesignRequest.objects.all().order_by('-created_at')
 
+    if status_filter:
+        requests = requests.filter(status=status_filter)
+
     return render(request, 'main/filter_status.html', {
-        'requests': requests
+        'requests': requests,
+        'status_filter': status_filter
     })
 
 
@@ -180,6 +186,18 @@ def filter_status(request):
 @user_passes_test(is_admin)
 def update_status(request, request_id):
     design_request = get_object_or_404(DesignRequest, id=request_id)
+    if design_request.status == DesignRequest.Status.DONE:
+        if request.method == 'POST':
+            messages.error(request, "Нельзя редактировать выполненную заявку.")
+            return redirect('filter_status')
+        form = AdminStatusForm(instance=design_request)
+        for field in form.fields.values():
+            field.disabled = True
+        return render(request, 'main/update_status.html', {
+            'form': form,
+            'request_obj': design_request,
+            'is_done': True
+        })
 
     if request.method == 'POST':
         form = AdminStatusForm(
@@ -195,5 +213,6 @@ def update_status(request, request_id):
 
     return render(request, 'main/update_status.html', {
         'form': form,
-        'request_obj': design_request
+        'request_obj': design_request,
+        'is_done': False
     })

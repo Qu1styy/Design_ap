@@ -2,30 +2,29 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h2>Заявка: {{ request_obj.title }}</h2>
+  <h2>Смена статуса</h2>
+  <p class="text-muted">Заявка: <b>{{ request_obj.title }}</b></p>
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="mb-3">
-      <label class="form-label">Текущий статус</label>
+    <div class="mb-4">
       <div class="mb-2">
-        {{ request_obj.get_status_display }}
+        <b>Текущий статус:</b> {{ request_obj.get_status_display }}
       </div>
-      <label class="form-label">Перевести в</label>
       <div class="mb-2">
-        {% if request_obj.status == 'new' %}
-          <button type="submit" name="status" value="in_progress" class="btn btn-primary">
-            В работу
-          </button>
-        {% elif request_obj.status == 'in_progress' %}
-          <button type="submit" name="status" value="done" class="btn btn-primary">
-            Выполнено
-          </button>
-        {% else %}
-          <span class="text-muted">Доступных переходов нет</span>
-        {% endif %}
       </div>
+      {% if request_obj.status == 'new' %}
+        <button type="submit" name="status" value="in_progress" class="btn btn-primary">
+          В работу
+        </button>
+      {% elif request_obj.status == 'in_progress' %}
+        <button type="submit" name="status" value="done" class="btn btn-primary">
+          Выполнено
+        </button>
+      {% else %}
+        <p class="text-muted">Заявка завершена, менять статус нельзя.</p>
+      {% endif %}
     </div>
 
     <div class="mb-3">
@@ -44,7 +43,9 @@
       </div>
     {% endif %}
 
-    <button class="btn btn-success">Сохранить</button>
+    {% if not is_done %}
+      <button class="btn btn-success">Сохранить</button>
+    {% endif %}
     <a href="{% url 'filter_status' %}" class="btn btn-secondary">
       Назад
     </a>

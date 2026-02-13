@@ -4,38 +4,62 @@
 <div class="container mt-4">
   <h1>Управление заявками</h1>
 
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Дата</th>
-        <th>Название</th>
-        <th>Пользователь</th>
-        <th>Статус</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
+  <div class="mb-3">
+    <a href="{% url 'filter_status' %}" class="btn btn-outline-secondary btn-sm{% if not status_filter %} active{% endif %}">Все</a>
+    <a href="{% url 'filter_status' %}?status=new" class="btn btn-outline-primary btn-sm{% if status_filter == 'new' %} active{% endif %}">Новые</a>
+    <a href="{% url 'filter_status' %}?status=in_progress" class="btn btn-outline-warning btn-sm{% if status_filter == 'in_progress' %} active{% endif %}">В работе</a>
+    <a href="{% url 'filter_status' %}?status=done" class="btn btn-outline-success btn-sm{% if status_filter == 'done' %} active{% endif %}">Выполнено</a>
+  </div>
+
+  {% if requests %}
+    <div class="row">
       {% for req in requests %}
-        <tr>
-          <td>{{ req.created_at|date:"d.m.Y H:i" }}</td>
-          <td>{{ req.title }}</td>
-          <td>{{ req.user.username }}</td>
-          <td>{{ req.get_status_display }}</td>
-          <td>
-            <a
-              href="{% url 'update_status' req.id %}"
-              class="btn btn-warning btn-sm"
-            >
-              Изменить
-            </a>
-          </td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="5">Заявок нет</td>
-        </tr>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100">
+            {% if req.photo %}
+              <img src="{{ req.photo.url }}" class="card-img-top" alt="{{ req.title }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ req.title }}</h5>
+              <p><b>ID:</b> {{ req.id }}</p>
+              <p><b>Дата:</b> {{ req.created_at|date:"d.m.Y H:i" }}</p>
+              <p><b>Пользователь:</b> {{ req.user.username }}</p>
+              <p><b>Категория:</b> {{ req.category.name }}</p>
+              <p><b>Описание:</b> {{ req.description }}</p>
+              <p>
+                <b>Статус:</b>
+                {% if req.status == 'new' %}
+                  <span class="badge bg-primary">Новая</span>
+                {% elif req.status == 'in_progress' %}
+                  <span class="badge bg-warning text-dark">В работе</span>
+                {% else %}
+                  <span class="badge bg-success">Выполнено</span>
+                {% endif %}
+              </p>
+              {% if req.admin_comment %}
+                <p><b>Комментарий администратора:</b> {{ req.admin_comment }}</p>
+              {% endif %}
+              {% if req.result_image %}
+                <p><b>Фото результата:</b></p>
+                <img src="{{ req.result_image.url }}" class="img-fluid rounded" alt="{{ req.title }}">
+              {% endif %}
+            </div>
+            {% if req.status != 'done' %}
+              <div class="card-footer bg-white border-0">
+                <a
+                  href="{% url 'update_status' req.id %}"
+                  class="btn btn-warning btn-sm"
+                >
+                  Изменить
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
       {% endfor %}
-    </tbody>
-  </table>
+    </div>
+  {% else %}
+    <p>Заявок нет</p>
+  {% endif %}
 </div>
 {% endblock %}
