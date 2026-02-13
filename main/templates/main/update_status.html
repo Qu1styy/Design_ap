@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Заявка: {{ request_obj.title }}</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Текущий статус</label>
+      <div class="mb-2">
+        {{ request_obj.get_status_display }}
+      </div>
+      <label class="form-label">Перевести в</label>
+      <div class="mb-2">
+        {% if request_obj.status == 'new' %}
+          <button type="submit" name="status" value="in_progress" class="btn btn-primary">
+            В работу
+          </button>
+        {% elif request_obj.status == 'in_progress' %}
+          <button type="submit" name="status" value="done" class="btn btn-primary">
+            Выполнено
+          </button>
+        {% else %}
+          <span class="text-muted">Доступных переходов нет</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      {{ form.admin_comment.label_tag }}
+      {{ form.admin_comment }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.result_image.label_tag }}
+      {{ form.result_image }}
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <button class="btn btn-success">Сохранить</button>
+    <a href="{% url 'filter_status' %}" class="btn btn-secondary">
+      Назад
+    </a>
+  </form>
+</div>
+{% endblock %}
