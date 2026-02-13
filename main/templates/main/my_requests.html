@@ -5,47 +5,45 @@
 {% block content %}
 <div class="container mt-4">
   <h1>Мои заявки</h1>
-  <a href="{% url 'create' %}" class="btn btn-primary mb-3">Создать заявку</a>
+    <a href="{% url 'create' %}" class="btn btn-primary mb-3">Создать заявку</a>
+
+  <!-- Фильтр по статусу -->
+  <div class="mb-3">
+    <a href="{% url 'my_requests' %}" class="btn btn-secondary btn-sm">Все</a>
+    <a href="{% url 'my_requests' %}?status=new" class="btn btn-primary btn-sm">Новые</a>
+    <a href="{% url 'my_requests' %}?status=in_progress" class="btn btn-warning btn-sm text-dark">В работе</a>
+    <a href="{% url 'my_requests' %}?status=done" class="btn btn-success btn-sm">Выполнено</a>
+  </div>
 
   {% if requests %}
     <div class="row">
       {% for r in requests %}
         <div class="col-md-6 col-lg-4 mb-4">
           <div class="card h-100">
-
             {% if r.photo %}
-              <img src="{{ r.photo.url }}" class="card-img-top">
+              <img src="{{ r.photo.url }}" class="card-img-top" alt="Фото помещения">
             {% endif %}
-
             <div class="card-body">
-              <h5>{{ r.title }}</h5>
-              <p>{{ r.description|truncatechars:100 }}</p>
-
-              <p><b>Категория:</b> {{ r.category.name }}</p>
-
-              {% if r.status == 'new' %}
-                <span class="badge bg-primary">Новая</span>
-              {% elif r.status == 'in_progress' %}
-                <span class="badge bg-warning text-dark">Принято в работу</span>
-              {% elif r.status == 'done' %}
-                <span class="badge bg-success">Выполнено</span>
-              {% endif %}
-
-              <p class="mt-2">
-                <small>{{ r.created_at|date:"d.m.Y H:i" }}</small>
+              <h5 class="card-title">{{ r.title }}</h5>
+              <p class="card-text">{{ r.description|truncatechars:100 }}</p>
+              <p><strong>Категория:</strong> {{ r.category.name }}</p>
+              <p>
+                <strong>Статус:</strong>
+                {% if r.status == 'new' %}<span class="badge bg-primary">Новая</span>{% endif %}
+                {% if r.status == 'in_progress' %}<span class="badge bg-warning text-dark">В работе</span>{% endif %}
+                {% if r.status == 'done' %}<span class="badge bg-success">Выполнено</span>{% endif %}
               </p>
-
-              {% if r.status == 'new' %}
-                <a class="btn btn-danger btn-sm" href="{% url 'delete_request' r.id %}">Удалить</a>
-              {% endif %}
+              <p><small class="text-muted">Дата: {{ r.created_at|date:"d.m.Y H:i" }}</small></p>
+                {% if r.status == 'new' %}
+  <a href="{% url 'delete_request' r.pk %}" class="btn btn-danger btn-sm mt-2">Удалить</a>
+{% endif %}
             </div>
-
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p>У вас пока нет заявок</p>
+    <p>Заявки не найдены.</p>
   {% endif %}
 </div>
 {% endblock %}

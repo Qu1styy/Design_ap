@@ -8,26 +8,102 @@
 
 
 {% if user.is_staff %}
-<h1>Главная</h1>
+<div class="container mt-4">
+  <h1>Главная страница</h1>
+
+  <p>
+    Заявки в работе:
+    <span class="badge bg-warning text-dark">{{ in_progress_count }}</span>
+  </p>
+
+  <h2 class="mt-4">Последние выполненные заявки</h2>
+
+  {% if latest_done_requests %}
+    <div class="row">
+      {% for r in latest_done_requests %}
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card h-100">
+            {% if r.photo %}
+              <img src="{{ r.photo.url }}" class="card-img-top" alt="{{ r.title }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ r.title }}</h5>
+              <p><b>Категория:</b> {{ r.category.name }}</p>
+              <p><small>{{ r.created_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Нет выполненных заявок</p>
+  {% endif %}
+</div>
 
 {% elif user.is_authenticated %}
-<h1>Главная</h1>
+<div class="container mt-4">
+  <h1>Главная страница</h1>
+
+  <p>
+    Заявки в работе:
+    <span class="badge bg-warning text-dark">{{ in_progress_count }}</span>
+  </p>
+
+  <h2 class="mt-4">Последние выполненные заявки</h2>
+
+  {% if latest_done_requests %}
+    <div class="row">
+      {% for r in latest_done_requests %}
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card h-100">
+            {% if r.photo %}
+              <img src="{{ r.photo.url }}" class="card-img-top" alt="{{ r.title }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ r.title }}</h5>
+              <p><b>Категория:</b> {{ r.category.name }}</p>
+              <p><small>{{ r.created_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Нет выполненных заявок</p>
+  {% endif %}
+</div>
 
 {% else %}
-<div style="margin-top: 250px;">
-    <h2 class="text-center">Вы ещё не авторизовались</h2>
-    <ul style="margin-right: 40px; display: flex; flex-direction: row; gap: 10px;" class="d-flex justify-content-center align-items-center nav nav-pills">
-            <li class="nav-item">
-                <a href="{% url 'login' %}" class="btn btn-primary" aria-current="page">
-                    Вход
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'register' %}" class="btn btn-primary">
-                    Регистрация
-                </a>
-            </li>
-        </ul>
+<div class="container mt-4">
+  <h1>Главная страница</h1>
+
+  <p>
+    Заявки в работе:
+    <span class="badge bg-warning text-dark">{{ in_progress_count }}</span>
+  </p>
+
+  <h2 class="mt-4">Последние выполненные заявки</h2>
+
+  {% if latest_done_requests %}
+    <div class="row">
+      {% for r in latest_done_requests %}
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card h-100">
+            {% if r.photo %}
+              <img src="{{ r.photo.url }}" class="card-img-top" alt="{{ r.title }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ r.title }}</h5>
+              <p><b>Категория:</b> {{ r.category.name }}</p>
+              <p><small>{{ r.created_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Нет выполненных заявок</p>
+  {% endif %}
 </div>
 {% endif %}
 

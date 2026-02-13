@@ -2,7 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import DesignRequest
+from .models import DesignRequest, Category
 
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField()
@@ -64,3 +64,8 @@ class DesignRequestForm(forms.ModelForm):
             raise forms.ValidationError('Фото обязательно')
 
         return photo
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']

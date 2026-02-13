@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Категории{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Категории заявок</h1>
+
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    {{ form.name }}
+    <button class="btn btn-primary ms-2">Добавить</button>
+  </form>
+
+  <ul class="list-group">
+    {% for category in categories %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ category.name }}
+        <a
+          href="{% url 'delete_category' category.id %}"
+          class="btn btn-danger btn-sm"
+        >
+          Удалить
+        </a>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Категорий нет</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

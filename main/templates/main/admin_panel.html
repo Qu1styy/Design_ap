@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1>Админ-панель</h1>
+
+  <div class="mt-4">
+    <a href="{% url 'filter_status' %}" class="btn btn-primary btn-lg me-3">
+      Статус заявки
+    </a>
+    <a href="{% url 'categories_list' %}" class="btn btn-secondary btn-lg">
+      Категории
+    </a>
+  </div>
+</div>
+{% endblock %}

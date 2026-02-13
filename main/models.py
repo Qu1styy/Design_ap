@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -22,9 +24,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -85,9 +84,9 @@ class DesignRequest(models.Model):
         validators=[validate_image_size, validate_image_extension]
     )
 
-    design_image = models.ImageField(
-        'Готовый дизайн',
-        upload_to='design_requests/designs/',
+    result_image = models.ImageField(
+        'Фото выполненной работы',
+        upload_to='design_requests/results/',
         blank=True,
         null=True
     )
